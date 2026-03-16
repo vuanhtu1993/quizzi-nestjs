@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { LoginGuard } from './login/login.guard';
 
 /**
  * @file app.controller.ts
@@ -18,6 +19,7 @@ export class AppController {
 
   /** useClass: swap implementation tùy môi trường */
   @Get()
+  @UseGuards(LoginGuard)
   getHello(): string {
     return this.appService.getHello();
   }
