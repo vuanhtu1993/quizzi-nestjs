@@ -1,6 +1,7 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LoginGuard } from './login/login.guard';
+import { TimeInterceptor } from './time/time.interceptor';
 
 /**
  * @file app.controller.ts
@@ -14,17 +15,21 @@ import { LoginGuard } from './login/login.guard';
  *   GET /demo/use-existing → useExisting (Logger alias, cùng 1 instance)
  */
 @Controller()
+// @UseGuards(LoginGuard)
+@UseInterceptors(TimeInterceptor)
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
   /** useClass: swap implementation tùy môi trường */
   @Get()
-  @UseGuards(LoginGuard)
+  // @UseGuards(LoginGuard)
+  // @UseInterceptors(TimeInterceptor)
   getHello(): string {
     return this.appService.getHello();
   }
 
   /** useClass: EmailService – Real hoặc Mock tùy biến NODE_ENV trong AppModule */
+  @UseGuards(LoginGuard)
   @Get('demo/use-class')
   demoUseClass(): string {
     return this.appService.demoUseClass();

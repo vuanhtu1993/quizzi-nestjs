@@ -4,6 +4,9 @@ import { ProductModule } from './product/product.module';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+
 // ─── Import các service và config ──────────────────────────────────────────
 import { AppService, AppLogger, DatabaseConnection, DB_CONNECTION, APP_LOGGER, NOTIFICATION_LOGGER } from './app.service';
 import { EMAIL_SERVICE, RealEmailService, MockEmailService } from './fundamentals/provider/email.service';
@@ -92,8 +95,22 @@ import { APP_CONFIG, appConfig } from './fundamentals/provider/app.config';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LogMiddleware)
-      .forRoutes('*');
+      // Nhóm 1: Áp dụng Logger cho TẤT CẢ các route (giám sát chung)
+      .apply(
+        // 1. Phổ quát: Nén dữ liệu HTTP để tăng tốc độ truyền tải
+        compression(),
+        // 2. Express cũ: Giải mã cookie từ header request
+        cookieParser(),
+        // 3. Giám sát: Log thông tin mọi request đi qua hệ thống
+        LogMiddleware
+      )
+      .forRoutes('*'); // Áp dụng cho TẤT CẢ các route
+    // // Nhóm 2: Áp dụng AuthMiddleware cho các route liên quan đến User và Product
+    // .apply(AuthMiddleware)
+    // .forRoutes('users', 'products')
+    // // Nhóm 3: Áp dụng SpecialAdminMiddleware CHỈ cho route /admin
+    // .apply(SpecialAdminMiddleware)
+    // .forRoutes({ path: 'admin', method: RequestMethod.ALL });
   }
 }
 
