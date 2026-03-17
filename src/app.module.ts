@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser';
 import { AppService, AppLogger, DatabaseConnection, DB_CONNECTION, APP_LOGGER, NOTIFICATION_LOGGER } from './app.service';
 import { EMAIL_SERVICE, RealEmailService, MockEmailService } from './fundamentals/provider/email.service';
 import { APP_CONFIG, appConfig } from './fundamentals/provider/app.config';
+import { UserModule } from './user/user.module';
 
 /**
  * @file app.module.ts
@@ -21,7 +22,7 @@ import { APP_CONFIG, appConfig } from './fundamentals/provider/app.config';
  * "Khi ai cần X, hãy tạo/trả về Y theo cách Z."
  */
 @Module({
-  imports: [QuizModule, ConfigModule.forRoot()],
+  imports: [QuizModule, ConfigModule.forRoot(), UserModule],
   controllers: [AppController],
   providers: [
     // ────────────────────────────────────────────────────────────────────

@@ -78,7 +78,7 @@ export class QuizService {
     if (!quiz.participants.includes(participantName)) {
       quiz.participants.push(participantName);
     }
-    
+
     return quiz;
   }
 

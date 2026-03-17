@@ -6,7 +6,7 @@ import { Participant } from '../common/decorators/participant.decorator';
 
 @Controller('quiz')
 export class QuizController {
-  constructor(private readonly quizService: QuizService) {}
+  constructor(private readonly quizService: QuizService) { }
 
   @Get()
   findAll() {

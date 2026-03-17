@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+
 
 // Tích hợp các thành phần AOP toàn cục
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
@@ -12,6 +14,9 @@ async function bootstrap() {
    * toàn bộ hệ thống Dependency Injection và các module liên quan.
    */
   const app = await NestFactory.create(AppModule);
+
+  // PIPE TOÀN CỤC = Bộ phận xử lý dữ liệu đầu vào cho mọi Request.
+  app.useGlobalPipes(new ValidationPipe());
 
   // [INTERCEPTOR TOÀN CỤC] = Bộ phận đóng gói đầu ra cho mọi Request thành công.
   app.useGlobalInterceptors(new TransformInterceptor());
