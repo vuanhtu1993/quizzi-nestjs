@@ -1,11 +1,13 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseFilters } from '@nestjs/common';
 import { ProductPricePipe } from '../common/pipes/product-price.pipe';
+import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
 
 /**
  * @file product.controller.ts
  * @description Controller xử lý các logic liên quan đến sản phẩm.
  */
 @Controller('product')
+@UseFilters(HttpExceptionFilter)
 export class ProductController {
 
   /**
