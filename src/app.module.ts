@@ -1,6 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LogMiddleware } from './log/log.middleware';
-import { ProductModule } from './product/product.module';
+import { ParticipantMiddleware } from './common/middlewares/participant.middleware';
+import { QuizModule } from './quiz/quiz.module';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 
@@ -20,7 +21,7 @@ import { APP_CONFIG, appConfig } from './fundamentals/provider/app.config';
  * "Khi ai cần X, hãy tạo/trả về Y theo cách Z."
  */
 @Module({
-  imports: [ProductModule, ConfigModule.forRoot()],
+  imports: [QuizModule, ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [
     // ────────────────────────────────────────────────────────────────────
@@ -105,12 +106,11 @@ export class AppModule implements NestModule {
         LogMiddleware
       )
       .forRoutes('*'); // Áp dụng cho TẤT CẢ các route
-    // // Nhóm 2: Áp dụng AuthMiddleware cho các route liên quan đến User và Product
-    // .apply(AuthMiddleware)
-    // .forRoutes('users', 'products')
-    // // Nhóm 3: Áp dụng SpecialAdminMiddleware CHỈ cho route /admin
-    // .apply(SpecialAdminMiddleware)
-    // .forRoutes({ path: 'admin', method: RequestMethod.ALL });
+
+    // Nhóm 2: Áp dụng ParticipantMiddleware cho các route liên quan đến Quiz
+    consumer
+      .apply(ParticipantMiddleware)
+      .forRoutes('quiz');
   }
 }
 

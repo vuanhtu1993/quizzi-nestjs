@@ -2,7 +2,6 @@ import { Controller, Get, UseGuards, UseInterceptors, Param, ParseIntPipe } from
 import { AppService } from './app.service';
 import { LoginGuard } from './login/login.guard';
 import { TimeInterceptor } from './time/time.interceptor';
-import { VideoStatusPipe } from './common/pipes/video-status.pipe';
 
 /**
  * @file app.controller.ts
@@ -54,17 +53,6 @@ export class AppController {
     return this.appService.demoUseExisting();
   }
 
-  /**
-   * PIPE DEMO: Minh họa Transformation & Validation
-   * @param status Sẽ được VideoStatusPipe chuyển sang UPCASE và validate
-   */
-  @Get('videos/:status')
-  getVideoByStatus(@Param('status', VideoStatusPipe) status: string) {
-    return {
-      message: `Tìm video với trạng thái: ${status}`,
-      processedStatus: status,
-    };
-  }
 
   /**
    * BUILT-IN PIPE DEMO: ParseIntPipe
