@@ -13,6 +13,7 @@ import { AppService, AppLogger, DatabaseConnection, DB_CONNECTION, APP_LOGGER, N
 import { EMAIL_SERVICE, RealEmailService, MockEmailService } from './fundamentals/provider/email.service';
 import { APP_CONFIG, appConfig } from './fundamentals/provider/app.config';
 import { UserModule } from './user/user.module';
+import { DbModule } from './db/db.module';
 
 /**
  * @file app.module.ts
@@ -22,7 +23,13 @@ import { UserModule } from './user/user.module';
  * "Khi ai cần X, hãy tạo/trả về Y theo cách Z."
  */
 @Module({
-  imports: [QuizModule, ConfigModule.forRoot(), UserModule],
+  imports: [
+    QuizModule,
+    ConfigModule.forRoot(),
+    UserModule,
+    // Đăng ký DbModule dạng Dynamic Module và truyền thư mục lưu trữ data vào
+    DbModule.forRoot({ dataFolderPath: './src/data' })
+  ],
   controllers: [AppController],
   providers: [
     // ────────────────────────────────────────────────────────────────────
