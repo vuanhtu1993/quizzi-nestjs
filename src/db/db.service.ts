@@ -84,6 +84,14 @@ export class DbService implements OnModuleInit {
   }
 
   /**
+   * READ - Tìm 1 item theo accountName
+   */
+  async findByAccountName(collectionName: string, accountName: string): Promise<any> {
+    const data = await this.getCollection(collectionName);
+    return data.find(item => item.accountName === accountName) || null;
+  }
+
+  /**
    * UPDATE - Cập nhật 1 item theo ID
    */
   async updateById(collectionName: string, id: string, updateData: any): Promise<any> {

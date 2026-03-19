@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import type { IDbCollection } from '../db/db.module';
@@ -17,6 +17,11 @@ export class UserService {
   }
 
   async register(registerUserDto: RegisterUserDto) {
+    // Check user existed
+    const existingUser = await this.userDb.findByAccountName(registerUserDto.accountName);
+    if (existingUser) {
+      throw new BadRequestException("Tài khoản đã tồn tại")
+    }
     const user = await this.userDb.save(registerUserDto);
     return user;
   }

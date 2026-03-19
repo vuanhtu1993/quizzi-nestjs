@@ -11,6 +11,7 @@ export interface IDbCollection<T = any> {
   save: (data: Partial<T>) => Promise<T>;
   updateById: (id: string, data: Partial<T>) => Promise<T | null>;
   removeById: (id: string) => Promise<boolean>;
+  findByAccountName: (accountName: string) => Promise<T | null>;
 }
 
 @Global() // Biến module tổng thành Global để DbService đi khắp nơi không cần import lại
@@ -49,6 +50,7 @@ export class DbModule {
             return {
               find: () => dbService.getCollection(collectionName),
               findById: (id: string) => dbService.findById(collectionName, id),
+              findByAccountName: (accountName: string) => dbService.findByAccountName(collectionName, accountName),
               save: (data: any) => dbService.insertOne(collectionName, data),
               updateById: (id: string, data: any) => dbService.updateById(collectionName, id, data),
               removeById: (id: string) => dbService.removeById(collectionName, id),
