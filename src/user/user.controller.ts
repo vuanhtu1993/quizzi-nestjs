@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { storage } from 'src/common/helpers/object-storage';
 
 @Controller('user')
 export class UserController {
@@ -17,6 +19,25 @@ export class UserController {
   @Post('register')
   register(@Body() registerUserDto: RegisterUserDto) {
     return this.userService.register(registerUserDto);
+  }
+
+  @Post('/upload/avatar')
+  @UseInterceptors(FileInterceptor('avatar', {
+    // File size and file extension
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error('Only image files are allowed!'), false);
+      }
+      cb(null, true);
+    },
+    limits: {
+      fileSize: 1024 * 1024 * 5, // 5MB
+    },
+  }))
+  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
+    console.log("upload file: ", file);
+    return file;
   }
 
   @Post("login")
