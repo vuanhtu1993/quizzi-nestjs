@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import type { IDbCollection } from '../db/db.module';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -24,6 +25,17 @@ export class UserService {
     }
     const user = await this.userDb.save(registerUserDto);
     return user;
+  }
+
+  async login(loginUserDto: LoginUserDto) {
+    const user = await this.userDb.findByAccountName(loginUserDto.accountName);
+    if (!user) {
+      throw new BadRequestException("Tài khoản không tồn tại")
+    }
+    if (user.password !== loginUserDto.password) {
+      throw new BadRequestException("Mật khẩu không chính xác")
+    }
+    return { message: "Đăng nhập thành công" };
   }
 
   async findAll() {

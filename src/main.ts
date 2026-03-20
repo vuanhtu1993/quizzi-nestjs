@@ -24,6 +24,6 @@ async function bootstrap() {
   // [EXCEPTION FILTER TOÀN CỤC] = Bộ phận xử lý sự cố chung cho mọi Lỗi (Exception) xảy ra.
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8000);
 }
 bootstrap();
